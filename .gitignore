@@ -1,5 +1,5 @@
 # ======================
-# Python
+# Python cache
 # ======================
 __pycache__/
 *.pyc
@@ -25,15 +25,32 @@ venv/
 Thumbs.db
 
 # ======================
-# Logs
+# Logs / Audit
 # ======================
 *.log
 audit_log.jsonl
 
 # ======================
-# Local Data / SQLite
-# (Kernel must stay stateless in repo)
+# Kernel STATE (NOT CODE)
 # ======================
-*.db
 kernel/data/
+kernel/state/
+kernel/memory/
+
+# ======================
+# Local runtime data
+# ======================
 data/
+*.db
+
+# ======================
+# Secrets
+# ======================
+.env
+*.key
+*.secret
+
+# ======================
+# OpenClaw local runtime
+# ======================
+.openclaw/
