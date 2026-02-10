@@ -3,7 +3,9 @@
 > A kernel-centric, trust-aware lab demonstrating how multiple real agents can collaborate without context rot, poisoning, or memory limits.
 
 
-
+💬 **Questions, ideas, or research discussions?**  
+Use **GitHub Discussions**:  
+👉 https://github.com/Vishalk4745L/cre-kernel-openclaw-lab/discussions
 
 ---
 
