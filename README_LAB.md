@@ -1,6 +1,6 @@
 🧠 CRE Kernel Lab — OpenClaw Multi-Agent Integration
 
-> A trust-aware kernel lab demonstrating how multiple real agents can work together without context rot, poisoning, or memory limits.
+> A kernel-centric, trust-aware lab demonstrating how multiple real agents can collaborate without context rot, poisoning, or memory limits.
 
 
 
@@ -9,22 +9,24 @@
 
 🔐 Project Status
 
-CRE Kernel Core → Private (active research & development)
+CRE Kernel Core → 🔒 Private (active research & development)
 
-CRE Kernel Lab → Open Source (MIT)
+CRE Kernel Lab → 🌐 Open Source (MIT)
 
 
-This repository is NOT the kernel itself.
-It is a public integration & experimentation lab showing how real agents (OpenClaw) can be connected to the kernel without modifying kernel core logic.
+⚠️ Important
+This repository is not the CRE Kernel itself.
+
+This is a public integration and experimentation lab that demonstrates how real agent runtimes (OpenClaw) can be connected to the kernel without modifying kernel core logic.
 
 
 ---
 
-🎯 What This Repo Demonstrates
+🎯 What This Repository Demonstrates
 
 This lab proves that a kernel-centric architecture can:
 
-Coordinate multiple agents
+Coordinate multiple independent agents
 
 Prevent context rot
 
@@ -36,7 +38,7 @@ Scale to infinite memory
 
 Remain vendor-agnostic
 
-Stay auditable and deterministic
+Stay auditable, deterministic, and trust-aware
 
 
 All while using real agents and real LLM APIs.
@@ -44,27 +46,32 @@ All while using real agents and real LLM APIs.
 
 ---
 
-🤖 Agent Runtime Used
+🤖 Agent Runtime
 
-We use OpenClaw as the agent runtime.
+This lab uses OpenClaw as the agent runtime.
 
 > One OpenClaw installation → multiple logical agents (roles)
 
 
 
-Role-Based Agents Wired
+Role-Based Agents
 
 Role	Adapter	Description
 
 Junior Agent	openclaw-junior	Fast, low-trust responder
 Senior Agent	openclaw-senior	High-confidence reasoning
-Tool Agent	openclaw-tool	Tool / execution focused
+Tool Agent	openclaw-tool	Tool / execution-focused
 All-Rounder	openclaw-allrounder	Balanced reasoning
 
 
-🔹 All roles share the same OpenClaw install
-🔹 Roles are logical adapters, not separate binaries
-🔹 Developers can add unlimited agents
+Key properties
+
+✅ All roles share one OpenClaw install
+
+✅ Roles are logical adapters, not separate binaries
+
+✅ Unlimited roles can be added without changing the kernel
+
 
 
 ---
@@ -86,9 +93,9 @@ CRE Kernel Resolver
                    ↓
              OpenClaw Runtime
                    ↓
-          LLM APIs (Gemini / etc.)
+          LLM APIs (Gemini / OpenRouter / etc.)
 
-Key Rule (Non-Negotiable)
+Non-Negotiable Design Rules
 
 ❌ Kernel does not import OpenClaw
 
@@ -100,6 +107,8 @@ Key Rule (Non-Negotiable)
 
 ✅ Adapters translate protocol → agent
 
+✅ Kernel remains clean, stable, and auditable
+
 
 
 ---
@@ -109,8 +118,8 @@ Key Rule (Non-Negotiable)
 Layer	Responsibility
 
 OpenClaw	Short-term agent context
-Kernel Lab	Resolution context
-Kernel Core (private)	Trust + belief memory
+Kernel Lab	Resolution & arbitration context
+Kernel Core (private)	Trust, belief, and long-term memory
 
 
 Result
@@ -127,9 +136,9 @@ Memory persists independently of agents
 
 ---
 
-🧨 Problems Solved (This Repo Exists Because Of These)
+🧨 Problems Solved (Why This Repo Exists)
 
-1️⃣ Context Rot — ❌ Solved
+1️⃣ Context Rot — ✅ Solved
 
 Traditional problem
 LLMs forget earlier context as conversations grow.
@@ -150,7 +159,7 @@ No long prompt chains
 
 ---
 
-2️⃣ Context Poisoning — ❌ Solved
+2️⃣ Context Poisoning — ✅ Solved
 
 Traditional problem
 One bad agent response corrupts future answers.
@@ -169,7 +178,7 @@ Poisoned output never enters memory
 
 ---
 
-3️⃣ Infinite Agents — ❌ Solved
+3️⃣ Infinite Agents — ✅ Solved
 
 Traditional problem
 Systems hard-code agent logic.
@@ -180,7 +189,7 @@ Adapters are pluggable
 
 Resolver loops dynamically
 
-Kernel unchanged
+Kernel remains unchanged
 
 
 ✅ Add 1 agent or 100 agents
@@ -189,10 +198,10 @@ Kernel unchanged
 
 ---
 
-4️⃣ Infinite Memory — ❌ Solved
+4️⃣ Infinite Memory — ✅ Solved
 
 Traditional problem
-LLMs limited by token windows.
+LLMs are limited by token windows.
 
 Kernel approach
 
@@ -207,17 +216,17 @@ Agents receive only relevant slices
 
 ---
 
-5️⃣ Infinite Agents × Infinite Memory — ❌ Solved
+5️⃣ Infinite Agents × Infinite Memory — ✅ Solved
 
 This is the core breakthrough.
 
-Traditional systems:
+Traditional systems
 
 > More agents = more chaos
 
 
 
-CRE Kernel approach:
+CRE Kernel
 
 > More agents = more signal
 
@@ -248,7 +257,7 @@ No human override
 No trust scoring
 
 
-All solved by kernel-first design.
+All addressed by kernel-first design.
 
 
 ---
@@ -269,14 +278,15 @@ cre-kernel-lab/
 │   ├── resolver.py
 │   └── trust.py
 │
-├── experiments/
-│   ├── multi_agent_resolution.py
-│   └── trust_dynamics.py
+├── examples/
+│   ├── test_openclaw_vs_kernel.py
+│   ├── proof_multi_agent_consensus.py
+│   └── autonomous_web_research_team.py
 │
 ├── docs/
 │   └── architecture.md
 │
-├── README.md
+├── README_LAB.md
 ├── OPEN_SOURCE.md
 ├── GOVERNANCE.md
 ├── SECURITY.md
@@ -306,8 +316,9 @@ for r in result["all_responses"]:
 
 Output
 
-FINAL: The CRE Kernel is the trust-aware orchestration layer
-       that governs agent belief, memory, and resolution.
+FINAL:
+The CRE Kernel is the trust-aware orchestration layer
+that governs agent belief, memory, and resolution.
 
 
 ---
@@ -326,7 +337,7 @@ To add a new agent:
 
 
 
-This repo supports:
+This lab supports:
 
 Any OpenClaw role
 
@@ -338,7 +349,7 @@ Any future agent protocol
 
 ---
 
-🔐 Why Kernel Core Is Private
+🔐 Why the Kernel Core Is Private
 
 The kernel is not a chatbot.
 It is a belief engine.
@@ -349,7 +360,7 @@ Integrity
 
 Safe evolution
 
-No misuse
+Misuse prevention
 
 Research continuity
 
@@ -366,7 +377,7 @@ Educate developers
 
 ---
 
-🧑‍💻 Who Is This For?
+🧑‍💻 Who This Is For
 
 Systems engineers
 
@@ -382,12 +393,45 @@ Anyone tired of prompt spaghetti
 
 ---
 
+🌐 Web Tools (Optional)
+
+This project does not require web browsing to demonstrate its core ideas.
+
+The CRE Kernel focuses on:
+
+Multi-agent reasoning
+
+Consensus resolution
+
+Trust-aware arbitration
+
+Context-rot & poisoning resistance
+
+Scalable agent orchestration
+
+
+Web tools (search, browsing, fetching) are optional.
+
+If enabled, OpenClaw uses the Brave Search API.
+
+To activate:
+
+Run openclaw configure --section web
+
+Or set the BRAVE_API_KEY environment variable
+
+
+If no web key is provided, agents gracefully fall back to reasoning-only mode.
+
+
+---
+
 📜 License
 
 MIT License
 You may use, fork, experiment, and build on this lab.
 
-> Kernel core is not included.
+> The CRE Kernel core is not included.
 
 
 

@@ -7,20 +7,21 @@ from adapters.adapter_interface import AgentAdapter
 
 class OpenClawBaseAdapter(AgentAdapter):
     """
-    OpenClaw Base Adapter (NON-INTERACTIVE, EMBEDDED MODE)
+    OpenClaw Base Adapter (Kernel-safe, OpenRouter-safe)
 
-    Design guarantees:
-    - No gateway dependency
-    - No TUI / stdin
-    - Kernel-controlled execution
-    - Windows + Linux safe
-    - Unicode-safe (emojis, Gemini output)
+    Guarantees:
+    - Never crashes the Kernel
+    - Works with OpenRouter / Gemini / Groq
+    - Does NOT rely on stopReason (unreliable)
+    - Payload-first parsing (correct OpenClaw behavior)
+    - Windows-safe encoding
     """
 
     adapter_id = "openclaw-base"
     adapter_type = "agent"
 
-    AGENT_NAME = "main"  # overridden by subclasses
+    # Overridden by subclasses (junior / senior / tool / allrounder)
+    AGENT_NAME = "main"
 
     def capabilities(self) -> Dict[str, Any]:
         return {
@@ -35,11 +36,10 @@ class OpenClawBaseAdapter(AgentAdapter):
         if not prompt:
             return {"reply": "Empty prompt", "confidence": 0.0}
 
-        # Windows-safe npx
-        npx_cmd = "npx.cmd" if os.name == "nt" else "npx"
+        npx = "npx.cmd" if os.name == "nt" else "npx"
 
         cmd = [
-            npx_cmd,
+            npx,
             "openclaw",
             "agent",
             "--agent", self.AGENT_NAME,
@@ -52,56 +52,73 @@ class OpenClawBaseAdapter(AgentAdapter):
             result = subprocess.run(
                 cmd,
                 cwd=os.path.expanduser("~/.openclaw"),
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                capture_output=True,
                 text=True,
-                encoding="utf-8",      # 🔑 CRITICAL FIX
-                errors="ignore",       # 🔑 CRITICAL FIX
-                timeout=40,
+                encoding="utf-8",
+                errors="replace",
+                timeout=90,
             )
 
-            stdout = (result.stdout or "").strip()
-            stderr = (result.stderr or "").strip()
-
-            if result.returncode != 0:
+            raw = (result.stdout or result.stderr or "").strip()
+            if not raw:
                 return {
-                    "reply": stderr or stdout or "OpenClaw execution failed",
+                    "reply": "⚠️ OpenClaw returned empty output",
                     "confidence": 0.0,
                 }
 
-            if not stdout:
-                return {
-                    "reply": "OpenClaw returned empty output",
-                    "confidence": 0.0,
-                }
-
-            # ---- JSON extraction (robust) ----
-            reply_text = stdout
-
+            # -------------------------------
+            # JSON parsing (best-effort)
+            # -------------------------------
             try:
-                data = json.loads(stdout)
-                if isinstance(data, dict):
-                    payloads = data.get("payloads")
-                    if isinstance(payloads, list) and payloads:
-                        reply_text = payloads[0].get("text") or stdout
+                data = json.loads(raw)
             except Exception:
-                # Non-JSON output (warnings, logs, etc.)
-                reply_text = stdout
+                # Non-JSON but valid text → still return
+                return {
+                    "reply": raw,
+                    "confidence": 0.4,
+                }
 
+            # -------------------------------
+            # ✅ PRIMARY SUCCESS PATH
+            # OpenClaw success = payloads exist
+            # -------------------------------
+            payloads = data.get("payloads")
+            if isinstance(payloads, list) and payloads:
+                text = payloads[0].get("text")
+                if text:
+                    return {
+                        "reply": text.strip(),
+                        "confidence": 0.6,
+                    }
+
+            # -------------------------------
+            # Explicit error block (rare)
+            # -------------------------------
+            if "error" in data:
+                err = data.get("error", {})
+                msg = err.get("message", "Unknown OpenClaw error")
+                return {
+                    "reply": f"⚠️ OpenClaw error: {msg}",
+                    "confidence": 0.0,
+                }
+
+            # -------------------------------
+            # Fallback — valid JSON but no text
+            # -------------------------------
             return {
-                "reply": reply_text.strip(),
-                "confidence": 0.6,
+                "reply": "⚠️ OpenClaw returned no usable text payload",
+                "confidence": 0.0,
             }
 
         except subprocess.TimeoutExpired:
             return {
-                "reply": "OpenClaw timeout exceeded",
+                "reply": "⚠️ OpenClaw timeout",
                 "confidence": 0.0,
             }
 
         except Exception as e:
             return {
-                "reply": f"OpenClaw adapter exception: {e}",
+                "reply": f"⚠️ OpenClaw exception: {e}",
                 "confidence": 0.0,
             }
 
