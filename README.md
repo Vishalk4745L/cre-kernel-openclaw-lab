@@ -1,84 +1,206 @@
+CRE Kernel
 
-📄 README.md
+Consensus & Reasoning Engine for Trust-Aware AI Systems
 
-# CRE Kernel  
-**Contextual Reasoning & Evaluation Kernel**
+> A kernel-level system that decides what agents should believe — not what they should say.
 
-> A trust-aware reasoning kernel for multi-agent systems.
 
-CRE Kernel is a foundational AI infrastructure project focused on **truth resolution, trust dynamics, and agent governance**.  
-It is not a chatbot, model wrapper, or workflow tool — it is the **kernel layer that decides what agents should believe**.
+
 
 ---
 
-## 🧠 Core Idea
+🧠 What is CRE Kernel?
 
-Modern AI systems suffer from:
-- Context rot
-- Memory poisoning
-- Unverifiable agent outputs
-- No persistent notion of trust
-- Fragile multi-agent coordination
+CRE Kernel (Consensus Runtime Environment) is a trust-aware reasoning kernel for multi-agent systems.
 
-**CRE Kernel** addresses this by introducing a **trust-weighted reasoning kernel** that sits *below* agents, models, and protocols.
+It is not:
 
-> Think of it as an **operating system for reasoning**, not another AI agent.
+❌ a chatbot
 
----
+❌ an LLM wrapper
 
-## ✨ What CRE Kernel Does
+❌ a prompt framework
 
-- Maintains **persistent memory** outside model context
-- Tracks **agent trust** over time (decay, penalties, rewards)
-- Resolves conflicting claims via **trust-weighted consensus**
-- Separates **kernel logic** from agents, models, and APIs
-- Supports **future adapters** (MCP, A2A, SDKs) without kernel changes
+❌ a workflow tool
 
----
 
-## 🧩 Architecture (High Level)
+It is:
 
-┌──────────────┐ │   Agents     │  (LLMs, tools, humans) └──────┬───────┘ │ via Adapters ┌──────▼───────┐ │  CRE Kernel  │  ← Trust, Memory, Consensus │              │ │  • Ledger    │ │  • Memory    │ │  • Trust     │ │  • Resolver  │ └──────┬───────┘ │ ┌──────▼───────┐ │  Data Store  │  (SQLite / future backends) └──────────────┘
+✅ a kernel-layer truth resolution engine
 
-The **kernel never imports LLMs**.  
-The **kernel never depends on APIs**.  
-All integrations happen through **adapters**.
+✅ a persistent trust & memory system
+
+✅ a governance layer below agents and models
+
+
+> Think of CRE Kernel as an operating system for reasoning, not another AI agent.
+
+
+
 
 ---
 
-## 🔌 Adapter System (Key Design)
+🚨 The Problem
 
-CRE Kernel uses a strict **Kernel ↔ Adapter interface**.
+Modern AI systems fail in predictable ways:
 
-- Kernel logic is **stable**
-- Adapters are **replaceable**
-- New protocols = new adapters
-- Kernel remains untouched
+Context rot (old truths overwritten by new noise)
+
+Memory poisoning (hallucinations stored as facts)
+
+No authority model between agents
+
+No persistent notion of trust
+
+Majority voting beats expertise
+
+Multi-agent systems drift over time
+
+
+LLMs are stateless.
+Prompts are ephemeral.
+Truth becomes fragile.
+
+
+---
+
+🧩 The Core Idea
+
+Truth should not be decided by:
+
+Recency
+
+Token probability
+
+Vector similarity
+
+Majority spam
+
+
+Truth must be decided by:
+
+Authority
+
+Confidence
+
+Trust history
+
+Consensus margin
+
+
+CRE Kernel enforces this at the kernel layer, not inside prompts.
+
+
+---
+
+✨ What CRE Kernel Does
+
+Maintains persistent memory outside model context
+
+Tracks agent trust over time (decay, penalties, rewards)
+
+Resolves conflicting claims using trust-weighted consensus
+
+Separates kernel logic from agents, models, and APIs
+
+Provides audit-ready decision trails
+
+Supports future protocols via adapters, without kernel changes
+
+
+
+---
+
+🧱 Architecture (High Level)
+
+┌───────────────┐
+│    Agents     │   (LLMs, tools, humans)
+└───────┬───────┘
+        │ via Adapters
+┌───────▼───────┐
+│   CRE Kernel  │   ← Trust, Memory, Consensus
+│               │
+│ • Ledger      │
+│ • Trust       │
+│ • Resolver    │
+│ • Governance  │
+└───────┬───────┘
+        │
+┌───────▼───────┐
+│  Data Store   │   (SQLite, future backends)
+└───────────────┘
+
+Design Guarantees
+
+Kernel never imports LLMs
+
+Kernel never depends on APIs
+
+Kernel never embeds agent logic
+
+All integrations happen via adapters
+
+
+
+---
+
+🔌 Adapter System (Critical Design)
+
+CRE Kernel uses a strict Kernel ↔ Adapter contract.
+
+Kernel logic is stable
+
+Adapters are replaceable
+
+New protocol = new adapter
+
+Kernel remains untouched
+
 
 This enables future support for:
-- Model Context Protocol (MCP)
-- Google Agent-to-Agent (A2A)
-- Agent SDKs
-- Custom orchestration layers
+
+Model Context Protocol (MCP)
+
+Agent-to-Agent (A2A)
+
+SDK-based agents
+
+Custom orchestration layers
+
+
 
 ---
 
-## 🚀 Current Features (v1.0)
+🚀 Current Capabilities (Kernel-Lab v1.0)
 
-- ✅ Trust ledger with decay
-- ✅ Senior / Junior agent trust modeling
-- ✅ Trust-weighted entity resolution
-- ✅ Persistent memory (SQLite)
-- ✅ Error classification (FACT / LOGIC / SPELLING)
-- ✅ Pluggable adapter registry
-- ✅ Mock agent for testing
-- ✅ FastAPI interface for external access
+✅ Persistent ledger (SQLite)
+
+✅ Trust scores with time-based decay
+
+✅ Trust-weighted entity resolution
+
+✅ Senior / Junior authority modeling
+
+✅ Cryptographically verified identities
+
+✅ Signature-verified write operations
+
+✅ Human override governance (signed)
+
+✅ Audit-ready event logging
+
+✅ Pluggable adapter registry
+
+✅ Mock agent for testing
+
+✅ FastAPI interface
+
+
 
 ---
 
-## 🧪 Example: Trust-Weighted Resolution
+🧪 Example: Trust-Weighted Resolution
 
-```http
 GET /resolve/API_PORT
 
 {
@@ -88,7 +210,7 @@ GET /resolve/API_PORT
   "reason": "Trust-weighted consensus"
 }
 
-The result depends on agent trust, not majority voting.
+👉 The result depends on trust and authority, not majority voting.
 
 
 ---
@@ -127,21 +249,23 @@ This project intentionally avoids:
 
 Hard-coding LLMs
 
-Agent-specific logic in the kernel
+Prompt-level hacks
 
-Short-term prompt hacks
+Agent-specific logic inside the kernel
 
 
 
 ---
 
-📌 Status
+📌 Project Status
 
-Stage: v1.0 (Kernel Core)
+Stage: Kernel-Lab v1.0 (Stable research baseline)
 
-Repo: Private (active development)
+Purpose: Experimental + research-grade infrastructure
 
-Roadmap: Adapters, distributed trust, multi-kernel federation
+Core Kernel: Private / under active development
+
+Lab Kernel: Open for experimentation and review
 
 
 
@@ -151,7 +275,7 @@ Roadmap: Adapters, distributed trust, multi-kernel federation
 
 Vishal
 Building trust-aware reasoning infrastructure
-Tamil Nadu, India
+Tamil Nadu, India 🇮🇳
 
 
 ---
@@ -159,6 +283,8 @@ Tamil Nadu, India
 ⚠️ Disclaimer
 
 CRE Kernel is experimental research software.
-APIs and internals may change as the kernel evolves.
+APIs, schemas, and internals may evolve as the kernel matures.
+
 
 ---
+
